@@ -7,6 +7,7 @@ package service.service;
 
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 /**
  *
@@ -44,6 +45,15 @@ public abstract class AbstractFacade<T> {
         return getEntityManager().createQuery(cq).getResultList();
     }
 
+    public List<T> findUserByLoginAndPassword(String login, String senha) {
+        Query query = getEntityManager()
+                .createNamedQuery("Usuario.findByLoginAndPassword")
+                .setParameter("login", login)
+                .setParameter("senha", senha);
+        
+        return query.getResultList();
+    }
+    
     public List<T> findRange(int[] range) {
         javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
         cq.select(cq.from(entityClass));
