@@ -5,10 +5,12 @@
  */
 package service.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -83,6 +85,34 @@ public class TransacaoFacadeREST extends AbstractFacade<Transacao> {
         return String.valueOf(super.count());
     }
 
+    @GET
+    @Path("usuario/{user}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<Transacao> findTransactionByUser(@PathParam("user") Integer userId) {
+        Query query = getEntityManager()
+                .createNamedQuery("Transacao.findByIdUsuario")
+                .setParameter("usuarioId", userId);
+        
+        if (query.getResultList().size() > 0) {
+            return query.getResultList();
+        } 
+        return new ArrayList<>();
+    }
+    
+    @GET
+    @Path("conta/{account}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<Transacao> findTransactionByAccount(@PathParam("account") Integer accountId) {
+        Query query = getEntityManager()
+                .createNamedQuery("Transacao.findByContaOrigem")
+                .setParameter("contaOrigem", accountId);
+        
+        if (query.getResultList().size() > 0) {
+            return query.getResultList();
+        } 
+        return new ArrayList<>();
+    }
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;

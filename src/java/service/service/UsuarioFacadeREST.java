@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -70,20 +71,47 @@ public class UsuarioFacadeREST extends AbstractFacade<Usuario> {
     }
 
     @GET
-    @Override
     @Path("{login}/{senha}")
-    @Produces({MediaType.APPLICATION_JSON})
-    public List<Usuario> findUserByLoginAndPassword(@PathParam("login") String login, @PathParam("senha") String senha) {
-        return super.findUserByLoginAndPassword(login, senha);
-    }
-    
-    @GET
-    @Path("{from}/{to}")
-    @Produces({MediaType.APPLICATION_JSON})
-    public List<Usuario> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        return super.findRange(new int[]{from, to});
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+     public Usuario findUserByLoginAndPassword(@PathParam("login") String login, @PathParam("senha") String senha) {
+        Query query = getEntityManager()
+                .createNamedQuery("Usuario.findByLoginAndPassword")
+                .setParameter("login", login)
+                .setParameter("senha", senha);
+        
+        if (query.getResultList().size() > 0) {
+            return (Usuario)query.getResultList().get(0);
+        } 
+        return new Usuario();
     }
 
+    @GET
+    @Path("email/{email}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+     public Usuario findUserByEmail(@PathParam("email") String email) {
+        Query query = getEntityManager()
+                .createNamedQuery("Usuario.findByEmail")
+                .setParameter("email", email);
+        
+        if (query.getResultList().size() > 0) {
+            return (Usuario)query.getResultList().get(0);
+        } 
+        return new Usuario();
+    }
+     
+    @GET
+    @Path("login/{login}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+     public Usuario findUserByLogin(@PathParam("login") String login) {
+        Query query = getEntityManager()
+                .createNamedQuery("Usuario.findByLogin")
+                .setParameter("login", login);
+        if (query.getResultList().size() > 0) {
+            return (Usuario)query.getResultList().get(0);
+        } 
+        return new Usuario();
+    }
+     
     @GET
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)

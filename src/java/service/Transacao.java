@@ -6,7 +6,6 @@
 package service;
 
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,8 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -35,8 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Transacao.findByDataTransacao", query = "SELECT t FROM Transacao t WHERE t.dataTransacao = :dataTransacao"),
     @NamedQuery(name = "Transacao.findByValor", query = "SELECT t FROM Transacao t WHERE t.valor = :valor"),
     @NamedQuery(name = "Transacao.findByContaOrigem", query = "SELECT t FROM Transacao t WHERE t.contaOrigem = :contaOrigem"),
-    @NamedQuery(name = "Transacao.findByContaDestino", query = "SELECT t FROM Transacao t WHERE t.contaDestino = :contaDestino"),
-    @NamedQuery(name = "Transacao.findByLoginUsuario", query = "SELECT t FROM Transacao t WHERE t.loginUsuario = :loginUsuario")})
+    @NamedQuery(name = "Transacao.findByIdUsuario", query = "SELECT t FROM Transacao t WHERE t.usuarioId = :usuarioId")})
 public class Transacao implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -48,20 +45,19 @@ public class Transacao implements Serializable {
     @Size(max = 10)
     @Column(name = "ds_transacao")
     private String dsTransacao;
+    @Size(max = 11)
     @Column(name = "data_transacao")
-    @Temporal(TemporalType.DATE)
-    private Date dataTransacao;
+    private String dataTransacao;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "valor")
     private Double valor;
     @Column(name = "conta_origem")
     private Integer contaOrigem;
-    @Column(name = "conta_destino")
-    private Integer contaDestino;
-    @Size(max = 100)
-    @Column(name = "login_usuario")
-    private String loginUsuario;
-
+  
+    @Column(name = "id_usuario")
+    private Integer usuarioId;
+    @Column(name = "tipo_transacao")
+    private String tipoTransacao;
     public Transacao() {
     }
 
@@ -85,14 +81,6 @@ public class Transacao implements Serializable {
         this.dsTransacao = dsTransacao;
     }
 
-    public Date getDataTransacao() {
-        return dataTransacao;
-    }
-
-    public void setDataTransacao(Date dataTransacao) {
-        this.dataTransacao = dataTransacao;
-    }
-
     public Double getValor() {
         return valor;
     }
@@ -107,22 +95,6 @@ public class Transacao implements Serializable {
 
     public void setContaOrigem(Integer contaOrigem) {
         this.contaOrigem = contaOrigem;
-    }
-
-    public Integer getContaDestino() {
-        return contaDestino;
-    }
-
-    public void setContaDestino(Integer contaDestino) {
-        this.contaDestino = contaDestino;
-    }
-
-    public String getLoginUsuario() {
-        return loginUsuario;
-    }
-
-    public void setLoginUsuario(String loginUsuario) {
-        this.loginUsuario = loginUsuario;
     }
 
     @Override
@@ -148,6 +120,48 @@ public class Transacao implements Serializable {
     @Override
     public String toString() {
         return "service.Transacao[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the usuarioId
+     */
+    public Integer getUsuarioId() {
+        return usuarioId;
+    }
+
+    /**
+     * @param usuarioId the usuarioId to set
+     */
+    public void setUsuarioId(Integer usuarioId) {
+        this.usuarioId = usuarioId;
+    }
+
+    /**
+     * @return the dataTransacao
+     */
+    public String getDataTransacao() {
+        return dataTransacao;
+    }
+
+    /**
+     * @param dataTransacao the dataTransacao to set
+     */
+    public void setDataTransacao(String dataTransacao) {
+        this.dataTransacao = dataTransacao;
+    }
+
+    /**
+     * @return the tipoTransacao
+     */
+    public String getTipoTransacao() {
+        return tipoTransacao;
+    }
+
+    /**
+     * @param tipoTransacao the tipoTransacao to set
+     */
+    public void setTipoTransacao(String tipoTransacao) {
+        this.tipoTransacao = tipoTransacao;
     }
     
 }
